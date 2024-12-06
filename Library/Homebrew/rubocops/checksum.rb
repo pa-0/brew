@@ -1,4 +1,4 @@
-# typed: true # rubocop:todo Sorbet/StrictSigil
+# typed: strict
 # frozen_string_literal: true
 
 require "rubocops/extend/formula_cop"
@@ -23,6 +23,7 @@ module RuboCop
           end
         end
 
+        sig { params(checksum: String).void }
         def audit_sha256(checksum)
           return if checksum.nil?
 
@@ -54,6 +55,8 @@ module RuboCop
             next unless regex_match_group(checksum, /[A-F]+/)
 
             add_offense(@offensive_source_range, message: "sha256 should be lowercase") do |corrector|
+              next if @offensive_node.nil?
+
               correction = @offensive_node.source.downcase
               corrector.insert_before(@offensive_node.source_range, correction)
               corrector.remove(@offensive_node.source_range)

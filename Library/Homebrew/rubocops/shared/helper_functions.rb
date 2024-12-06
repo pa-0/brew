@@ -31,8 +31,9 @@ module RuboCop
         @length = match_object.to_s.length
         @line_no = line_number(node)
         @source_buf = source_buffer(node)
-        @offensive_node = node
-        @offensive_source_range = source_range(@source_buf, @line_no, @column, @length)
+        @offensive_node = T.let(node, T.nilable(RuboCop::AST::Node))
+        @offensive_source_range = T.let(source_range(@source_buf, @line_no, @column, @length),
+                                        T.nilable(Parser::Source::Range))
         match_object
       end
 
