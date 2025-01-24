@@ -63,7 +63,7 @@ module Homebrew
           }],
           [:flag, "--cc=", {
             description: "Attempt to compile using the specified <compiler>, which should be the name of the " \
-                         "compiler's executable, e.g. `gcc-7` for GCC 7. In order to use LLVM's clang, specify " \
+                         "compiler's executable, e.g. `gcc-9` for GCC 9. In order to use LLVM's clang, specify " \
                          "`llvm_clang`. To use the Apple-provided clang, specify `clang`. This option will only " \
                          "accept compilers that are provided by Homebrew or bundled with macOS. Please do not " \
                          "file issues if you encounter errors while using this option.",
@@ -100,6 +100,9 @@ module Homebrew
           }],
           [:switch, "--skip-post-install", {
             description: "Install but skip any post-install steps.",
+          }],
+          [:switch, "--skip-link", {
+            description: "Install but skip linking the keg into the prefix.",
           }],
           [:flag, "--bottle-arch=", {
             depends_on:  "--build-bottle",
@@ -207,7 +210,6 @@ module Homebrew
         end
 
         if casks.any?
-
           if args.dry_run?
             if (casks_to_install = casks.reject(&:installed?).presence)
               ohai "Would install #{::Utils.pluralize("cask", casks_to_install.count, include_count: true)}:"
@@ -290,12 +292,15 @@ module Homebrew
             only_dependencies: args.only_dependencies?,
             force:             args.force?,
             quiet:             args.quiet?,
+            skip_link:         args.skip_link?,
+            overwrite:         args.overwrite?,
           )
         end
 
         return if formulae.any? && installed_formulae.empty?
 
-        Install.perform_preinstall_checks(cc: args.cc)
+        Install.perform_preinstall_checks_once
+        Install.check_cc_argv(args.cc)
 
         Install.install_formulae(
           installed_formulae,
@@ -318,6 +323,7 @@ module Homebrew
           verbose:                    args.verbose?,
           dry_run:                    args.dry_run?,
           skip_post_install:          args.skip_post_install?,
+          skip_link:                  args.skip_link?,
         )
 
         Upgrade.check_installed_dependents(

@@ -37,7 +37,7 @@ class Livecheck
   # Sets the `@referenced_cask_name` instance variable to the provided `String`
   # or returns the `@referenced_cask_name` instance variable when no argument
   # is provided. Inherited livecheck values from the referenced cask
-  # (e.g. regex) can be overridden in the livecheck block.
+  # (e.g. regex) can be overridden in the `livecheck` block.
   sig {
     params(
       # Name of cask to inherit livecheck info from.
@@ -54,20 +54,20 @@ class Livecheck
   end
 
   # Sets the `@referenced_formula_name` instance variable to the provided
-  # `String` or returns the `@referenced_formula_name` instance variable when
-  # no argument is provided. Inherited livecheck values from the referenced
-  # formula (e.g. regex) can be overridden in the livecheck block.
+  # `String`/`Symbol` or returns the `@referenced_formula_name` instance
+  # variable when no argument is provided. Inherited livecheck values from the
+  # referenced formula (e.g. regex) can be overridden in the `livecheck` block.
   sig {
     params(
       # Name of formula to inherit livecheck info from.
-      formula_name: String,
-    ).returns(T.nilable(String))
+      formula_name: T.any(String, Symbol),
+    ).returns(T.nilable(T.any(String, Symbol)))
   }
   def formula(formula_name = T.unsafe(nil))
     case formula_name
     when nil
       @referenced_formula_name
-    when String
+    when String, :parent
       @referenced_formula_name = formula_name
     end
   end
@@ -178,7 +178,6 @@ class Livecheck
   delegate version: :@package_or_resource
   delegate arch: :@package_or_resource
   private :version, :arch
-
   # Returns a `Hash` of all instance variable values.
   # @return [Hash]
   sig { returns(T::Hash[String, T.untyped]) }
