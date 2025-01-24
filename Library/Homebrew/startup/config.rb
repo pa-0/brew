@@ -1,9 +1,14 @@
-# typed: true # rubocop:todo Sorbet/StrictSigil
+# typed: true
 # frozen_string_literal: true
 
 raise "HOMEBREW_BREW_FILE was not exported! Please call bin/brew directly!" unless ENV["HOMEBREW_BREW_FILE"]
 
 # Path to `bin/brew` main executable in `HOMEBREW_PREFIX`
+# Used for e.g. permissions checks.
+HOMEBREW_ORIGINAL_BREW_FILE = Pathname(ENV.fetch("HOMEBREW_ORIGINAL_BREW_FILE")).freeze
+
+# Path to the executable that should be used to run `brew`.
+# This may be HOMEBREW_ORIGINAL_BREW_FILE or HOMEBREW_BREW_WRAPPER.
 HOMEBREW_BREW_FILE = Pathname(ENV.fetch("HOMEBREW_BREW_FILE")).freeze
 
 # Where we link under

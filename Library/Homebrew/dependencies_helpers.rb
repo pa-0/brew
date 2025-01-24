@@ -5,8 +5,13 @@ require "cask_dependent"
 
 # Helper functions for dependencies.
 module DependenciesHelpers
+  extend T::Helpers
+
+  requires_ancestor { Kernel }
+
   def args_includes_ignores(args)
     includes = [:required?, :recommended?] # included by default
+    includes << :implicit? if args.include_implicit?
     includes << :build? if args.include_build?
     includes << :test? if args.include_test?
     includes << :optional? if args.include_optional?

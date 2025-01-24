@@ -93,7 +93,14 @@ begin
       Utils::Analytics.report_command_run(command_instance)
       command_instance.run
     else
-      Homebrew.public_send Commands.method_name(cmd)
+      begin
+        Homebrew.public_send Commands.method_name(cmd)
+      rescue NoMethodError => e
+        case_error = "undefined method `#{cmd.downcase}' for module Homebrew"
+        odie "Unknown command: brew #{cmd}" if e.message == case_error
+
+        raise
+      end
     end
   elsif (path = Commands.external_ruby_cmd_path(cmd))
     Homebrew.running_command = cmd
@@ -144,7 +151,7 @@ begin
   end
 rescue UsageError => e
   require "help"
-  Homebrew::Help.help cmd, remaining_args: args&.remaining, usage_error: e.message
+  Homebrew::Help.help cmd, remaining_args: args&.remaining || [], usage_error: e.message
 rescue SystemExit => e
   onoe "Kernel.exit" if args&.debug? && !e.success?
   if args&.debug? || ARGV.include?("--debug")
@@ -193,6 +200,7 @@ rescue RuntimeError, SystemCallError => e
   end
 
   exit 1
+# Catch any other types of exceptions.
 rescue Exception => e # rubocop:disable Lint/RescueException
   onoe e
 
