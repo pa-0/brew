@@ -78,15 +78,11 @@ Secure password storage and syncing is provided by [1Password for Teams](https:/
 
 [<img src="https://i.1password.com/akb/featured/1password-icon.svg" alt="1Password" height="64">](https://1password.com)
 
-Flaky test detection and tracking is provided by [BuildPulse](https://buildpulse.io/).
-
-[![BuildPulse](https://github.com/Homebrew/brew/assets/1699443/87385e9a-6c47-4e59-b17e-fe083e945709)](https://buildpulse.io)
-
 <https://brew.sh>'s DNS is [resolving with DNSimple](https://dnsimple.com/resolving/homebrew).
 
 [![DNSimple](https://cdn.dnsimple.com/assets/resolving-with-us/logo-light.png)](https://dnsimple.com/resolving/homebrew#gh-light-mode-only)
 [![DNSimple](https://cdn.dnsimple.com/assets/resolving-with-us/logo-dark.png)](https://dnsimple.com/resolving/homebrew#gh-dark-mode-only)
 
-Homebrew is generously supported by [GitHub](https://github.com/github), [Custom Ink](https://github.com/customink), [Randy Reddig](https://github.com/ydnar), [Codecademy](https://github.com/Codecademy), [MacPaw Inc.](https://github.com/MacPaw), [Tim Miller](https://github.com/broadcaststorm), [Workbrew](https://github.com/Workbrew) and many other users and organisations via [GitHub Sponsors](https://github.com/sponsors/Homebrew).
+Homebrew is generously supported by [GitHub](https://github.com/github), [Custom Ink](https://github.com/customink), [Randy Reddig](https://github.com/ydnar), [Codecademy](https://github.com/Codecademy), [MacPaw Inc.](https://github.com/MacPaw), [zx80a](https://github.com/zx80a), [Workbrew](https://github.com/Workbrew) and many other users and organisations via [GitHub Sponsors](https://github.com/sponsors/Homebrew).
 
 [![GitHub](https://github.com/github.png?size=64)](https://github.com/github)

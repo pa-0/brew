@@ -1,4 +1,4 @@
-# typed: true # rubocop:todo Sorbet/StrictSigil
+# typed: strict
 # frozen_string_literal: true
 
 module RuboCop
@@ -9,7 +9,7 @@ module RuboCop
 
         # These stanzas can be overridden by `on_*` blocks, so take them into account.
         # TODO: Update this list if new stanzas are added to `Cask::DSL` that call `set_unique_stanza`.
-        OVERRIDEABLE_METHODS = [
+        OVERRIDABLE_METHODS = [
           :appcast, :arch, :auto_updates, :conflicts_with, :container,
           :desc, :homepage, :sha256, :url, :version
         ].freeze
@@ -17,6 +17,7 @@ module RuboCop
                   "Add it to an `on_{system}` block instead. " \
                   "Use `:or_older` or `:or_newer` to specify a range of macOS versions."
 
+        sig { override.params(cask_block: RuboCop::Cask::AST::CaskBlock).void }
         def on_cask(cask_block)
           cask_stanzas = cask_block.toplevel_stanzas
 
@@ -26,7 +27,7 @@ module RuboCop
 
           cask_stanzas.each do |stanza|
             # Skip if the stanza is not allowed to be overridden.
-            next unless OVERRIDEABLE_METHODS.include?(stanza.stanza_name)
+            next unless OVERRIDABLE_METHODS.include?(stanza.stanza_name)
             # Skip if the stanza outside of a block is not also in an `on_*` block.
             next unless stanzas_in_blocks.include?(stanza.stanza_name)
 
@@ -34,8 +35,9 @@ module RuboCop
           end
         end
 
+        sig { params(on_system: T::Array[RuboCop::Cask::AST::Stanza]).returns(T::Set[Symbol]) }
         def on_system_stanzas(on_system)
-          names = Set.new
+          names = T.let(Set.new, T::Set[Symbol])
           method_nodes = on_system.map(&:method_node)
           method_nodes.select(&:block_type?).each do |node|
             node.child_nodes.each do |child|
@@ -56,14 +58,17 @@ module RuboCop
           names
         end
 
+        sig { params(node: RuboCop::AST::Node).returns(T::Boolean) }
         def inside_livecheck_defined?(node)
           single_stanza_livecheck_defined?(node) || multi_stanza_livecheck_defined?(node)
         end
 
+        sig { params(node: RuboCop::AST::Node).returns(T::Boolean) }
         def single_stanza_livecheck_defined?(node)
           node.parent.block_type? && node.parent.method_name == :livecheck
         end
 
+        sig { params(node: RuboCop::AST::Node).returns(T::Boolean) }
         def multi_stanza_livecheck_defined?(node)
           grandparent_node = node.parent.parent
           node.parent.begin_type? && grandparent_node.block_type? && grandparent_node.method_name == :livecheck
