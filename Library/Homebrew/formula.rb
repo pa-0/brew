@@ -1499,7 +1499,7 @@ class Formula
   # @see .link_overwrite
   def link_overwrite?(path)
     # Don't overwrite files not created by Homebrew.
-    return false if path.stat.uid != HOMEBREW_BREW_FILE.stat.uid
+    return false if path.stat.uid != HOMEBREW_ORIGINAL_BREW_FILE.stat.uid
 
     # Don't overwrite files belong to other keg except when that
     # keg's formula is deleted.
@@ -2903,6 +2903,7 @@ class Formula
             test
           end
         end
+      # Handle all possible exceptions running formula tests.
       rescue Exception # rubocop:disable Lint/RescueException
         staging.retain! if debug?
         raise
@@ -3173,6 +3174,7 @@ class Formula
     end
   end
 
+  sig { params(quiet: T::Boolean).returns(T::Array[Keg]) }
   def eligible_kegs_for_cleanup(quiet: false)
     eligible_for_cleanup = []
     if latest_version_installed?
@@ -3200,6 +3202,9 @@ class Formula
             opoo "Skipping (old) #{keg} due to it being linked" unless quiet
           elsif pinned? && keg == Keg.new(@pin.path.resolved_path)
             opoo "Skipping (old) #{keg} due to it being pinned" unless quiet
+          elsif (keepme = keg/".keepme") && keepme.exist? && keepme.readable? &&
+                (keepme_refs = keepme.readlines.map(&:strip).select { |ref| Pathname(ref).exist? }.presence)
+            opoo "Skipping #{keg} as it needed by #{keepme_refs.join(", ")}" unless quiet
           else
             eligible_for_cleanup << keg
           end
