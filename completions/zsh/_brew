@@ -775,6 +775,7 @@ _brew_deps() {
     '(--tree)--graph[Show dependencies as a directed graph]' \
     '--help[Show this message]' \
     '--include-build[Include `:build` dependencies for formula]' \
+    '--include-implicit[Include implicit dependencies used to download and unpack source files]' \
     '--include-optional[Include `:optional` dependencies for formula]' \
     '--include-requirements[Include requirements in addition to dependencies for formula]' \
     '--include-test[Include `:test` dependencies for formula (non-recursive)]' \
@@ -1144,6 +1145,7 @@ _brew_instal() {
     '(--formula)--screen-saverdir[Target location for Screen Savers (default: `~/Library/Screen Savers`)]' \
     '(--formula)--servicedir[Target location for Services (default: `~/Library/Services`)]' \
     '(--formula)--skip-cask-deps[Skip installing cask dependencies]' \
+    '(--cask)--skip-link[Install but skip linking the keg into the prefix]' \
     '(--cask)--skip-post-install[Install but skip any post-install steps]' \
     '--verbose[Print the verification and post-install steps]' \
     '(--formula)--vst-plugindir[Target location for VST Plugins (default: `~/Library/Audio/Plug-Ins/VST`)]' \
@@ -1153,7 +1155,7 @@ _brew_instal() {
     '(--casks --binaries --require-sha --quarantine --adopt --skip-cask-deps --zap --appdir --keyboard-layoutdir --colorpickerdir --prefpanedir --qlplugindir --mdimporterdir --dictionarydir --fontdir --servicedir --input-methoddir --internet-plugindir --audio-unit-plugindir --vst-plugindir --vst3-plugindir --screen-saverdir --language)--formula[Treat all named arguments as formulae]' \
     '*::formula:__brew_formulae' \
     - cask \
-    '(--formulae --env --ignore-dependencies --only-dependencies --cc --build-from-source --force-bottle --include-test --HEAD --fetch-HEAD --keep-tmp --debug-symbols --build-bottle --skip-post-install --bottle-arch --interactive --git --overwrite)--cask[Treat all named arguments as casks]' \
+    '(--formulae --env --ignore-dependencies --only-dependencies --cc --build-from-source --force-bottle --include-test --HEAD --fetch-HEAD --keep-tmp --debug-symbols --build-bottle --skip-post-install --skip-link --bottle-arch --interactive --git --overwrite)--cask[Treat all named arguments as casks]' \
     '*::cask:__brew_casks'
 }
 
@@ -1202,6 +1204,7 @@ _brew_install() {
     '(--formula)--screen-saverdir[Target location for Screen Savers (default: `~/Library/Screen Savers`)]' \
     '(--formula)--servicedir[Target location for Services (default: `~/Library/Services`)]' \
     '(--formula)--skip-cask-deps[Skip installing cask dependencies]' \
+    '(--cask)--skip-link[Install but skip linking the keg into the prefix]' \
     '(--cask)--skip-post-install[Install but skip any post-install steps]' \
     '--verbose[Print the verification and post-install steps]' \
     '(--formula)--vst-plugindir[Target location for VST Plugins (default: `~/Library/Audio/Plug-Ins/VST`)]' \
@@ -1211,7 +1214,7 @@ _brew_install() {
     '(--casks --binaries --require-sha --quarantine --adopt --skip-cask-deps --zap --appdir --keyboard-layoutdir --colorpickerdir --prefpanedir --qlplugindir --mdimporterdir --dictionarydir --fontdir --servicedir --input-methoddir --internet-plugindir --audio-unit-plugindir --vst-plugindir --vst3-plugindir --screen-saverdir --language)--formula[Treat all named arguments as formulae]' \
     '*::formula:__brew_formulae' \
     - cask \
-    '(--formulae --env --ignore-dependencies --only-dependencies --cc --build-from-source --force-bottle --include-test --HEAD --fetch-HEAD --keep-tmp --debug-symbols --build-bottle --skip-post-install --bottle-arch --interactive --git --overwrite)--cask[Treat all named arguments as casks]' \
+    '(--formulae --env --ignore-dependencies --only-dependencies --cc --build-from-source --force-bottle --include-test --HEAD --fetch-HEAD --keep-tmp --debug-symbols --build-bottle --skip-post-install --skip-link --bottle-arch --interactive --git --overwrite)--cask[Treat all named arguments as casks]' \
     '*::cask:__brew_casks'
 }
 
@@ -1240,6 +1243,7 @@ _brew_irb() {
 # brew lc
 _brew_lc() {
   _arguments \
+    '--autobump[Include packages that are autobumped by BrewTestBot. By default these are skipped]' \
     '(--json)--debug[Display any debugging information]' \
     '(--tap --installed)--eval-all[Evaluate all available formulae and casks, whether installed or not, to check them]' \
     '(--formula)--extract-plist[Enable checking multiple casks with ExtractPlist strategy]' \
@@ -1331,6 +1335,7 @@ _brew_list() {
 # brew livecheck
 _brew_livecheck() {
   _arguments \
+    '--autobump[Include packages that are autobumped by BrewTestBot. By default these are skipped]' \
     '(--json)--debug[Display any debugging information]' \
     '(--tap --installed)--eval-all[Evaluate all available formulae and casks, whether installed or not, to check them]' \
     '(--formula)--extract-plist[Enable checking multiple casks with ExtractPlist strategy]' \
@@ -2244,6 +2249,7 @@ _brew_uses() {
     '--eval-all[Evaluate all available formulae and casks, whether installed or not, to show their dependents]' \
     '--help[Show this message]' \
     '--include-build[Include formulae that specify formula as a `:build` dependency]' \
+    '--include-implicit[Include formulae that have formula as an implicit dependency to download and unpack source files]' \
     '--include-optional[Include formulae that specify formula as an `:optional` dependency]' \
     '--include-test[Include formulae that specify formula as a `:test` dependency]' \
     '(--all --missing)--installed[Only list formulae and casks that are currently installed]' \
