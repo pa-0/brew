@@ -217,6 +217,10 @@ if the installed versions are outdated.
 
 : List dependencies by their full name.
 
+`--include-implicit`
+
+: Include implicit dependencies used to download and unpack source files
+
 `--include-build`
 
 : Include `:build` dependencies for *`formula`*.
@@ -639,6 +643,10 @@ upgrade *`formula`* if it is already installed but outdated.
 `--skip-post-install`
 
 : Install but skip any post-install steps.
+
+`--skip-link`
+
+: Install but skip linking the keg into the prefix.
 
 `--bottle-arch`
 
@@ -1465,6 +1473,11 @@ dependency for their stable builds.
 
 : Evaluate all available formulae and casks, whether installed or not, to show
   their dependents.
+
+`--include-implicit`
+
+: Include formulae that have *`formula`* as an implicit dependency to download
+  and unpack source files
 
 `--include-build`
 
@@ -2376,6 +2389,11 @@ from `HOMEBREW_LIVECHECK_WATCHLIST` or `~/.homebrew/livecheck_watchlist.txt`.
 
 : Enable checking multiple casks with ExtractPlist strategy.
 
+`--autobump`
+
+: Include packages that are autobumped by BrewTestBot. By default these are
+  skipped.
+
 ### `pr-automerge` \[*`options`*\]
 
 Find pull requests that can be automatically merged using `brew pr-publish`.
@@ -3124,8 +3142,9 @@ flags which will help with finding keg-only dependencies like `openssl`,
 
 `--no-upgrade`
 
-: `install` does not run `brew upgrade` on outdated dependencies. Note they may
-  still be upgraded by `brew install` if needed.
+: `install` does not run `brew upgrade` on outdated dependencies. `check` does
+  not check for outdated dependencies. Note they may still be upgraded by `brew
+  install` if needed.
 
 `-f`, `--force`
 
@@ -3645,6 +3664,10 @@ prefix-specific files take precedence over system-wide files (unless
   
   *Default:* `https://github.com/Homebrew/brew`.
 
+`HOMEBREW_BREW_WRAPPER`
+
+: If set, use wrapper to call `brew` rather than auto-detecting it.
+
 `HOMEBREW_BROWSER`
 
 : Use this as the browser when opening project homepages.
@@ -3816,6 +3839,11 @@ prefix-specific files take precedence over system-wide files (unless
 : If set, Homebrew will refuse to read formulae or casks provided from file
   paths, e.g. `brew install ./package.rb`.
 
+`HOMEBREW_FORCE_API_AUTO_UPDATE`
+
+: If set, update the Homebrew API formula or cask data even if
+  `HOMEBREW_NO_AUTO_UPDATE` is set.
+
 `HOMEBREW_FORCE_BREWED_CA_CERTIFICATES`
 
 : If set, always use a Homebrew-installed `ca-certificates` rather than the
@@ -3830,6 +3858,11 @@ prefix-specific files take precedence over system-wide files (unless
 
 : If set, always use a Homebrew-installed `git`(1) rather than the system
   version. Automatically set if the system version of `git` is too old.
+
+`HOMEBREW_FORCE_BREW_WRAPPER`
+
+: If set, require `HOMEBREW_BREW_WRAPPER` to be set to the same value as
+  `HOMEBREW_FORCE_BREW_WRAPPER` for non-trivial `brew` commands.
 
 `HOMEBREW_FORCE_VENDOR_RUBY`
 
@@ -3908,6 +3941,11 @@ prefix-specific files take precedence over system-wide files (unless
   
   *Default:* The "Beer Mug" emoji.
 
+`HOMEBREW_LIVECHECK_AUTOBUMP`
+
+: If set, `brew livecheck` will include data for packages that are autobumped by
+  BrewTestBot.
+
 `HOMEBREW_LIVECHECK_WATCHLIST`
 
 : Consult this file for the list of formulae to check by default when no formula
@@ -3978,6 +4016,10 @@ prefix-specific files take precedence over system-wide files (unless
 
 : If set, do not print any hints about changing Homebrew's behaviour with
   environment variables.
+
+`HOMEBREW_NO_FORCE_BREW_WRAPPER`
+
+: If set, disables `HOMEBREW_FORCE_BREW_WRAPPER` behaviour, even if set.
 
 `HOMEBREW_NO_GITHUB_API`
 
